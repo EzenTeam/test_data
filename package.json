@@ -1,0 +1,12 @@
+{
+  "name": "test_data",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/EzenTeam/test_data.git",
+  "author": "bona <bona373737@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  }
+}
