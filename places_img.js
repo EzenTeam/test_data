@@ -1,4 +1,8 @@
 import fs from 'fs';
+import Axios from 'axios';
+import download from 'image-downloader';
+import { mkdirs } from './FileHelper.js';
+
 
 const placesJson=[
   {
@@ -4662,24 +4666,42 @@ const placesJson=[
   }
 ]
 
-let places = placesJson.map((v,i)=>{
-  return {
-    'title':v.title,
-    'introduction':v.introduction,
-    'sbst': v.sbst,
-    'postcode':v.postcode? v.postcode:0,
-    'address':v.address,
-    'roadaddress': v.roadaddress,
-    'phoneno': v.phoneno,
-    'alltag': v.alltag,
-    'tag': v.tag,
-    'logitude': v.longitude,
-    'latitude': v.latitude,
-    'reg_date': '2022-07-24 00:00:00',
-    'edit_date': '2022-07-24 00:00:00'
-  }
+let imageURL = placesJson.map((v,i)=>{
+  return v.repPhoto.photoid.imgpath;
 })
+// console.log(imageURL)
 
-places = JSON.stringify(places).replace(/\\n/g, "").replace(/\\r/g,"")
-// console.log(places);
-fs.writeFileSync('places.json',places, 'utf8');
+async function downloadImage(url, filepath) {
+    const response = await Axios({
+        url,
+        method: 'GET',
+        responseType: 'stream'
+    });
+    return new Promise((resolve, reject) => {
+        response.data.pipe(fs.createWriteStream(filepath))
+            .on('error', reject)
+            .once('close', () => resolve(filepath)); 
+    });
+}
+
+// for(const item of imageURL){
+  // downloadImage(image,'C:\\Workspace\\Ezen\\test_data\\test.jpeg');
+// }
+
+// const url = 'https://api.cdn.visitjeju.net/photomng/imgpath/201810/17/c072ee1a-2a02-4be7-b0cd-62f4daf2f847.gif';
+// const filepath = 'C:\\Workspace\\Ezen\\test_data\\test1.jpeg'
+function downloadImage2(url, filepath) {
+  return download.image({
+     url,
+     dest: filepath 
+  });
+}
+
+let count = 1;
+for(const item of imageURL){
+  // mkdirs(`C:\\Workspace\\Ezen\\test_data\\test${count}.jpeg`);
+  const filepath = `C:\\Workspace\\Ezen\\test_data\\place${count}.jpeg`;
+
+  downloadImage2(item,filepath);
+  count++;
+}

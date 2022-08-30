@@ -1,0 +1,1 @@
+// "place${}.jpeg" 파일경로 DB에 insert하기 
