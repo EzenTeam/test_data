@@ -4669,7 +4669,7 @@ const placesJson=[
 let imageURL = placesJson.map((v,i)=>{
   return v.repPhoto.photoid.imgpath;
 })
-// console.log(imageURL)
+console.log(imageURL)
 
 async function downloadImage(url, filepath) {
     const response = await Axios({
